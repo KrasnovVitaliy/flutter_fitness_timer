@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
-import 'config.dart';
 import 'timerConfigWidget/timerConfigWidget.dart';
+import 'timerScreen.dart';
+import 'package:flutter/services.dart';
+import 'dart:async';
 
-void main() => runApp(MyApp());
+void main() {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runZoned<Future<Null>>(() async {
+      runApp(new MyApp());
+    });
+  });
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -12,11 +21,11 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         fontFamily: 'Montserrat',
-        accentColor: Colors.purpleAccent[400],
-        cursorColor: Colors.purple[700],
-        primaryColor: Colors.purple[500],
-        primaryColorDark: Colors.purple[700],
-        buttonColor: Colors.purple[500],
+        accentColor: Colors.yellowAccent[400],
+        cursorColor: Colors.yellow[700],
+        primaryColor: Colors.yellow[500],
+        primaryColorDark: Colors.yellow[700],
+        buttonColor: Colors.yellow[500],
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -32,36 +41,28 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Color _scaffordColor = Colors.white;
-  final Config _appConfig = new Config();
   TimerConfigWidget _timerConfigWidget;
 
-  void _getScaffordColor() {
-    _appConfig.getConfig(isDarkThemeKey).then((value) {
-      var colorValue = Colors.white;
-      if (value == 'true') {
-        colorValue = Colors.black;
-      }
-      setState(() {
-        _scaffordColor = colorValue;
-      });
-    });
+  void _startTimer() {
+    var _timerConfig = _timerConfigWidget.getTimerSettings();
+    print(_timerConfig);
+    Navigator.push(
+      context,
+      new MaterialPageRoute(
+          builder: (context) => new TimerScreen(timerConfig: _timerConfig)),
+    );
   }
 
-  void _startTimer() {
-    print(_timerConfigWidget.getTimerSettings());
-  }
   @override
   void initState() {
-    _appConfig.setConfig(isDarkThemeKey, 'false');
-    _getScaffordColor();
+    super.initState();
     _timerConfigWidget = TimerConfigWidget();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _scaffordColor,
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text(widget.title),
       ),

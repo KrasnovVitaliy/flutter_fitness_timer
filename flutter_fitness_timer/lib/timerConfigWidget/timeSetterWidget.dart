@@ -15,33 +15,19 @@ class _TimeSetterWidgetState extends State<TimeSetterWidget> {
   TextEditingController _minutesTextController;
   TextEditingController _secondesTextController;
   int _maxLength = 2;
-  String _minutes = "";
-  String _seconds = "";
-  Color _widgetColor = Colors.white;
+  String _minutes = "0";
+  String _seconds = "0";
 
   final Config _appConfig = new Config();
 
   @override
   void initState() {
+    super.initState();
     _minutesTextController = new TextEditingController();
     _secondesTextController = new TextEditingController();
 
-    _minutesTextController.text = "00";
-    _secondesTextController.text = "00";
-
-    _getWidgetColor();
-  }
-
-  void _getWidgetColor() {
-    _appConfig.getConfig(isDarkThemeKey).then((value) {
-      var colorValue = Colors.white;
-      if (value == 'true') {
-        colorValue = Colors.black;
-      }
-      setState(() {
-        _widgetColor = colorValue;
-      });
-    });
+    _minutesTextController.text = "0";
+    _secondesTextController.text = "0";
   }
 
   void _onMinutesChange(String newVal) {
@@ -49,6 +35,10 @@ class _TimeSetterWidgetState extends State<TimeSetterWidget> {
       _minutes = newVal;
     } else {
       _minutesTextController.text = _minutes;
+    }
+    if (int.parse(_minutes) < 0) {
+      _minutesTextController.text = "0";
+      _minutes = "0";
     }
     if (int.parse(_minutes) > 60) {
       _minutesTextController.text = "60";
@@ -64,6 +54,10 @@ class _TimeSetterWidgetState extends State<TimeSetterWidget> {
     } else {
       _secondesTextController.text = _seconds;
     }
+    if (int.parse(_seconds) < 0) {
+      _secondesTextController.text = "0";
+      _seconds = "0";
+    }
     if (int.parse(_seconds) > 59) {
       _secondesTextController.text = "59";
       _seconds = "59";
@@ -74,52 +68,57 @@ class _TimeSetterWidgetState extends State<TimeSetterWidget> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: _widgetColor,
+      color: Colors.black,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.only(bottom: 8, top: 8),
             child: Text(
               widget.title,
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
-                  color: Colors.purpleAccent),
+                  color: Colors.yellow),
             ),
           ),
           Container(
             constraints: BoxConstraints(),
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
+              padding: const EdgeInsets.only(bottom: 16, left: 8, right: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Expanded(child: Container()),
-                  Flexible(
+                  Container(
+                    width: 55,
                     child: TextField(
+                      textAlign: TextAlign.center,
                       controller: _minutesTextController,
                       keyboardType: TextInputType.number,
-                      cursorColor: Colors.purple,
+                      cursorColor: Colors.yellow,
                       onChanged: _onMinutesChange,
-                      style: new TextStyle(color: Colors.purple, fontSize: 26),
+                      style: new TextStyle(color: Colors.yellow, fontSize: 26),
                     ),
                   ),
                   Text(
                     " : ",
+                    textAlign: TextAlign.start,
                     style: TextStyle(
-                        color: Colors.purple,
+                        color: Colors.yellow,
                         fontWeight: FontWeight.bold,
                         fontSize: 32),
                   ),
-                  Flexible(
+                  Container(
+                    width: 55,
                     child: TextField(
+                      textAlign: TextAlign.center,
                       controller: _secondesTextController,
                       keyboardType: TextInputType.number,
-                      cursorColor: Colors.purple,
+                      cursorColor: Colors.yellow,
                       onChanged: _onSecondesChange,
-                      style: new TextStyle(color: Colors.purple, fontSize: 26),
+                      style: new TextStyle(color: Colors.yellow, fontSize: 26),
                     ),
                   ),
                   Expanded(child: Container()),

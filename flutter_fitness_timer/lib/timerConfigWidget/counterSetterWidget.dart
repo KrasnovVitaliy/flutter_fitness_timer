@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fitness_timer/config.dart';
 
 class CounterSetterWidget extends StatefulWidget {
-  CounterSetterWidget({Key key, this.title, onChangeCallback})
+  CounterSetterWidget({Key key, this.title, this.onChangeCallback})
       : super(key: key);
   final String title;
   Function onChangeCallback;
@@ -14,28 +13,13 @@ class CounterSetterWidget extends StatefulWidget {
 class _CounterSetterWidgetState extends State<CounterSetterWidget> {
   TextEditingController _countsTextController;
   int _maxLength = 3;
-  String _counts = "";
-  Color _widgetColor = Colors.white;
-
-  final Config _appConfig = new Config();
+  String _counts = "1";
 
   @override
   void initState() {
+    super.initState();
     _countsTextController = new TextEditingController();
-    _countsTextController.text = "00";
-    _getWidgetColor();
-  }
-
-  void _getWidgetColor() {
-    _appConfig.getConfig(isDarkThemeKey).then((value) {
-      var colorValue = Colors.white;
-      if (value == 'true') {
-        colorValue = Colors.black;
-      }
-      setState(() {
-        _widgetColor = colorValue;
-      });
-    });
+    _countsTextController.text = "1";
   }
 
   void _onCountsChange(String newVal) {
@@ -43,6 +27,10 @@ class _CounterSetterWidgetState extends State<CounterSetterWidget> {
       _counts = newVal;
     } else {
       _countsTextController.text = _counts;
+    }
+    if (int.parse(_counts) < 1) {
+      _countsTextController.text = "1";
+      _counts = "1";
     }
     if (int.parse(_counts) > 999) {
       _countsTextController.text = "999";
@@ -54,18 +42,19 @@ class _CounterSetterWidgetState extends State<CounterSetterWidget> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: _widgetColor,
+      color: Colors.black,
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.only(bottom: 8, top: 8),
             child: Text(
               widget.title,
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
-                  color: Colors.purpleAccent),
+                  color: Colors.yellow),
             ),
           ),
           Container(
@@ -73,20 +62,20 @@ class _CounterSetterWidgetState extends State<CounterSetterWidget> {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
-                  Expanded(child: Container()),
-                  Flexible(
+                  Container(
+                    width: 55,
                     child: TextField(
+                      textAlign: TextAlign.center,
                       controller: _countsTextController,
                       keyboardType: TextInputType.number,
-                      cursorColor: Colors.purple,
+                      cursorColor: Colors.yellow,
                       onChanged: _onCountsChange,
-                      style: new TextStyle(color: Colors.purple, fontSize: 26),
+                      style: new TextStyle(color: Colors.yellow, fontSize: 26),
                     ),
                   ),
-                  Expanded(child: Container()),
                 ],
               ),
             ),
