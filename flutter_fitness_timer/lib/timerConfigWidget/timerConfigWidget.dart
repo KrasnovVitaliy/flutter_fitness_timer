@@ -52,7 +52,7 @@ class TimerConfigWidget extends StatelessWidget {
           color: Colors.yellowAccent,
         ),
         TimeSetterWidget(
-          title: "Тренировка",
+          title: "Упражнение",
           onChangeCallback: _onTrainSettingsChange,
         ),
         Divider(

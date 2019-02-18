@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         primaryColorDark: Colors.yellow[700],
         buttonColor: Colors.yellow[500],
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Фитнес таймер'),
     );
   }
 }

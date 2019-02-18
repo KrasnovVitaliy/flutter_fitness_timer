@@ -121,18 +121,24 @@ class _TimerScreenState extends State<TimerScreen> {
 
   void _timerTick() {
     if (isRunning) {
-      setState(() {
-        _currentSeconds--;
-        if (_currentSeconds < 0) {
-          _currentSeconds = 59;
-          _currentMinutes--;
-          if (_currentMinutes < 0) {
-            _currentMinutes = 0;
-            _currentSeconds = 0;
-            this._setNextTimer();
+      setState(
+        () {
+          _currentSeconds--;
+          if (_currentSeconds < 0) {
+            _currentSeconds = 59;
+            _currentMinutes--;
+
+            if (_currentMinutes < 0) {
+              _currentMinutes = 0;
+              _currentSeconds = 0;
+              this._setNextTimer();
+            }
           }
-        }
-      });
+        },
+      );
+      if (_currentSeconds < 3 && _currentMinutes == 0) {
+        this._playBeep();
+      }
     }
   }
 
@@ -172,6 +178,10 @@ class _TimerScreenState extends State<TimerScreen> {
         isRunning = !isRunning;
       }
     });
+  }
+
+  _playBeep() async {
+    _audioPlayer.play("sounds/beep_3.mp3");
   }
 
   _playSingleBell() async {
@@ -239,6 +249,7 @@ class _TimerScreenState extends State<TimerScreen> {
     super.dispose();
     Screen.keepOn(false);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
